@@ -19,6 +19,22 @@
   "bugs": {
     "url": "https://github.com/ynck-chrl/reflectx/issues"
   },
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "templating",
+    "dom-binding",
+    "reactive",
+    "directives",
+    "lightweight",
+    "no-dependencies",
+    "no-build",
+    "alpine-like",
+    "nativelayer.dev",
+    "x-if",
+    "x-for",
+    "x-text"
+  ],
   "sideEffects": false,
   "engines": {
     "node": ">=18.0.0"
