@@ -23,15 +23,6 @@ jobs:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
       
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Run tests
-        run: npm test
-      
-      - name: Build package
-        run: npm run build
-      
       - name: Publish to NPM
         run: cd reflectx && npm publish --access public --provenance
         env:
