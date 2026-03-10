@@ -1,32 +1,71 @@
-![rendux Logo](https://raw.githubusercontent.com/ynck-chrl/rendux/master/rendux-logo.jpg)
+![reflectx Logo](https://raw.githubusercontent.com/ynck-chrl/reflectx/main/reflectx-logo.jpg)
 
-# rendux
+[![npm version](https://img.shields.io/npm/v/@nativelayer.dev/reflectx.svg)](https://www.npmjs.com/package/@nativelayer.dev/reflectx)
+[![License](https://img.shields.io/badge/license-PolyForm%20NC%201.0.0-blue.svg)](./LICENSE)
+[![Bundle size](https://img.shields.io/badge/minified-~17KB-green.svg)]()
 
-## Introduction
+# reflectx
 
-`rendux` is a lightweight dependency-free templating engine designed for use within Custom Elements (Web Components) and plain HTML. It provides reactive templating features through directives, making it easy to create dynamic, state-driven components without a full framework.
+`reflectx` is a lightweight dependency-free templating and DOM binding engine designed for use within Custom Elements (Web Components) and plain HTML. It provides declarative reactive templating features through directives, making it easy to create dynamic, state-driven components without a full framework.
 
-### Size
+- Minified: ~17 KB (ESM), ~17.1 KB (CJS)
+- Gzipped: ~5.5 KB
 
-- Minified: 13.2 KB (ESM), 13.3 KB (CJS)
-- Gzipped: ~4.7 KB
+> `reflectx` is pre-1.0; minor breaking changes may occur before 1.0. Pin your version for production use.
+
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Why reflectx?](#why-reflectx)
+- [Installation](#installation)
+- [Core Concepts](#core-concepts)
+- [Directives](#directives)
+- [Plugin System](#plugin-system)
+- [Browser Support](#browser-support)
+- [Known Limitations](#known-limitations)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Quick Start
+
+```html
+<div id="app">
+  <h2 x-text="title"></h2>
+  <template x-for="item of items">
+    <span x-text="item.name"></span>
+  </template>
+</div>
+<script type="module">
+  import { reflectx } from 'https://unpkg.com/@nativelayer.dev/reflectx@latest/dist/reflectx.esm.min.js';
+  const state = { title: 'Hello', items: [{ name: 'World' }] };
+  reflectx(state, document.querySelector('#app'));
+</script>
+```
+
+## Why reflectx?
+
+- **Custom Elements first** — Works with Web Components and plain HTML, no framework overhead
+- **No build step** — Use via CDN or npm, no build required
+- **Explicit control** — Call `reflectx(state, element)` when you want to re-render
+- **Alpine-like syntax** — Familiar directives (`x-if`, `x-for`, `@click`, etc.) with `x-` prefix
+- **Plugin system** — Extend with custom plugins
 
 ## Installation
 
 ### Via NPM
 
 ```bash
-npm install @ynck/rendux
+npm install @nativelayer.dev/reflectx
 ```
 
 Then import in your project:
 
 ```js
 // ES Module (recommended)
-import { rendux } from '@ynck/rendux';
+import { reflectx } from '@nativelayer.dev/reflectx';
 
 // CommonJS
-const { rendux } = require('@ynck/rendux');
+const { reflectx } = require('@nativelayer.dev/reflectx');
 ```
 
 ### Via CDN (No Build Step)
@@ -36,12 +75,12 @@ const { rendux } = require('@ynck/rendux');
 ```html
 <!-- ES Module -->
 <script type="module">
-  import { rendux } from 'https://unpkg.com/@ynck/rendux@latest/dist/rendux.min.js';
+  import { reflectx } from 'https://unpkg.com/@nativelayer.dev/reflectx@latest/dist/reflectx.esm.min.js';
 </script>
 
 <!-- Or use specific version -->
 <script type="module">
-  import { rendux } from 'https://unpkg.com/@ynck/rendux@0.93.2/dist/rendux.min.js';
+  import { reflectx } from 'https://unpkg.com/@nativelayer.dev/reflectx@0.3.2/dist/reflectx.esm.min.js';
 </script>
 ```
 
@@ -50,12 +89,12 @@ const { rendux } = require('@ynck/rendux');
 ```html
 <!-- Latest version -->
 <script type="module">
-  import { rendux } from 'https://esm.sh/@ynck/rendux@latest'
+  import { reflectx } from 'https://esm.sh/@nativelayer.dev/reflectx@latest'
 </script>
 
 <!-- Or with specific version -->
 <script type="module">
-  import { rendux } from 'https://esm.sh/@ynck/rendux@0.93.2'
+  import { reflectx } from 'https://esm.sh/@nativelayer.dev/reflectx@0.3.2'
 </script>
 ```
 
@@ -63,12 +102,12 @@ const { rendux } = require('@ynck/rendux');
 
 ```html
 <script type="module">
-  import { rendux } from 'https://cdn.skypack.dev/@ynck/rendux'
+  import { reflectx } from 'https://cdn.skypack.dev/@nativelayer.dev/reflectx'
 </script>
 
 <!-- Or with specific version -->
 <script type="module">
-  import { rendux } from 'https://cdn.skypack.dev/@ynck/rendux@0.93.2';
+  import { reflectx } from 'https://cdn.skypack.dev/@nativelayer.dev/reflectx@0.3.2';
 </script>
 ```
 
@@ -77,30 +116,30 @@ const { rendux } = require('@ynck/rendux');
 Clone the repository and use the source directly:
 
 ```bash
-git clone https://github.com/ynck-chrl/rendux.git
-cd rendux
+git clone https://github.com/ynck-chrl/reflectx.git
+cd reflectx
 ```
 
 Then import from source:
 
 ```html
 <script type="module">
-  import { rendux } from './src/rendux.js';
+  import { reflectx } from './src/reflectx.js';
 </script>
 ```
 
 Or if using in a Node.js project:
 
 ```js
-import { rendux } from './path/to/rendux/src/rendux.js';
+import { reflectx } from './path/to/reflectx/src/reflectx.js';
 ```
 
 ### Build Outputs
 
-When installed via NPM, rendux provides multiple build outputs:
+When installed via NPM, `reflectx` provides multiple build outputs:
 
-- **ESM (ES Modules)**: `dist/rendux.min.js` - For modern browsers and bundlers
-- **CommonJS**: `dist/rendux.cjs.min.js` - For Node.js and legacy tools
+- **ESM (ES Modules)**: `dist/reflectx.esm.min.js` - For modern browsers and bundlers
+- **CommonJS**: `dist/reflectx.cjs.min.js` - For Node.js and legacy tools
 - **Source Maps**: Available for all builds (`.map` files)
 
 The `package.json` exports field automatically selects the correct build:
@@ -109,8 +148,8 @@ The `package.json` exports field automatically selects the correct build:
 {
   "exports": {
     ".": {
-      "import": "./dist/rendux.min.js",
-      "require": "./dist/rendux.cjs.min.js"
+      "import": "./dist/reflectx.esm.min.js",
+      "require": "./dist/reflectx.cjs.min.js"
     }
   }
 }
@@ -121,47 +160,98 @@ The `package.json` exports field automatically selects the correct build:
 TypeScript definitions are not yet included. You can create a declaration file:
 
 ```typescript
-// rendux.d.ts
-declare module 'rendux' {
-  export function rendux(state: any, element: HTMLElement): void;
-  export function use(plugin: any): typeof rendux;
+// reflectx.d.ts
+declare module 'reflectx' {
+  export function reflectx(state: any, element: HTMLElement): void;
+  export function use(plugin: any): typeof reflectx;
   // Add other exports as needed
 }
 ```
 
-
-
 ## Core Concepts
 
-`rendux` is a function that takes a state object and a DOM element, then processes templating directives within that element. It provides several directives to handle common UI patterns:
+`reflectx` is a function that takes a state object and a DOM element, then processes templating directives within that element. It provides several directives to handle common UI patterns:
 
 - `x-if` for conditional rendering
-- `x-for` for list rendering
+- `x-for` for loop rendering
 - `x-class` for conditional classes
 - `x-*` for dynamic attributes
-- `render` for text content interpolation
-- `@event` for event handling
-- `render.plugin` for custom plugin execution
+- `x-text` for text content interpolation
+- `@event` or `x-on:event` for event handling
+- `x-text.plugin` for custom plugin execution
 
 ## Logging System
 
-rendux includes a flexible logging system controlled by the `logs` attribute. You can enable logging for specific features:
+reflectx includes a flexible logging system controlled by the `logs` attribute. You can enable logging for specific features:
 
 ```html
 <!-- Enable all logs -->
 <my-component logs="all"></my-component>
 
 <!-- Enable specific feature logs -->
-<my-component logs="for, if, attr, class, render, plugins"></my-component>
+<my-component logs="for, if, attr, class, text, on, plugins"></my-component>
 ```
 
 Available log categories:
+
 - `for`: x-for loop processing
 - `if`: x-if conditional rendering
 - `attr`: x-attr attribute processing
 - `class`: x-class processing
-- `render`: Text content rendering
+- `text`: x-text content rendering
+- `on`: Event handler attachment
 - `plugins`: Plugin execution and results
+
+### Log Aliases
+
+Each log category supports multiple aliases for convenience. You can use either the short name or the `x-` prefixed version:
+
+| Short name | x- prefixed | Notes |
+|------------|-------------|-------|
+| `for` | `x-for` | |
+| `if` | `x-if` | |
+| `attr` | `x-attr` | |
+| `class` | `x-class` | |
+| `text` | `x-text` | |
+| `on` | `x-on` | Also accepts `events` as an alias |
+| `plugins` | — | No x- prefix variant |
+| `all` | — | Enables all logs |
+
+```html
+<!-- These are equivalent -->
+<my-component logs="text, class"></my-component>
+<my-component logs="x-text, x-class"></my-component>
+
+<!-- Enable event logs using any alias -->
+<my-component logs="on"></my-component>
+<my-component logs="x-on"></my-component>
+<my-component logs="events"></my-component>
+```
+
+### HTML syntax helper (IDE Syntax Highlighting)
+
+reflectx exports an `html` template tag function that enables HTML syntax highlighting in your IDE when writing templates as template literals:
+
+```js
+import { reflectx, html } from '@nativelayer.dev/reflectx';
+
+class MyComponent extends HTMLElement {
+  connectedCallback() {
+    // The html tag enables syntax highlighting in VS Code, WebStorm, etc.
+    this.innerHTML = html`
+      <div>
+        <h2 x-text="title"></h2>
+        <template x-for="item of items">
+          <span x-text="item.name"></span>
+        </template>
+      </div>
+    `;
+    reflectx(this.state, this);
+  }
+}
+```
+
+The `html` tag is purely for IDE support and doesn't transform the string - it returns the template literal as-is. Most modern IDEs will recognize this pattern and provide HTML syntax highlighting, autocompletion, and formatting within the template.
 
 ## Basic Usage
 
@@ -170,19 +260,19 @@ Available log categories:
 #### With Internal State and Shadow DOM
 
 ```js
-import { rendux } from 'rendux';
+import { reflectx } from 'reflectx';
 
-class MyElement extends HTMLElement {
+class TodoApp extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
     
     // Internal component state
     this.state = {
-      title: 'User List',
-      users: [
-        { name: 'Alice', active: true },
-        { name: 'Bob', active: false }
+      title: 'My Tasks',
+      todos: [
+        { id: 1, text: 'Learn reflectx', done: true },
+        { id: 2, text: 'Take a nap', done: false }
       ]
     };
   }
@@ -190,23 +280,23 @@ class MyElement extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.innerHTML = `
       <div>
-        <h2 render="title"></h2>
-        <template x-for="user of users">
-          <div x-class="(active, user.active)">
-            <span render="user.name"></span>
-            <button @click="toggleUser(user)">Toggle</button>
+        <h2 x-text="title"></h2>
+        <template x-for="todo of todos">
+          <div x-class="(completed, todo.done)">
+            <span x-text="todo.text"></span>
+            <button @click="toggleTodo(todo)">Toggle</button>
           </div>
         </template>
       </div>
     `;
     // Pass state and element - renders into shadowRoot
-    rendux(this.state, this);
+    reflectx(this.state, this);
   }
 
-  toggleUser(user) {
-    user.active = !user.active;
+  toggleTodo(todo) {
+    todo.done = !todo.done;
     // Re-render after state change
-    rendux(this.state, this);
+    reflectx(this.state, this);
   }
 }
 ```
@@ -214,18 +304,18 @@ class MyElement extends HTMLElement {
 #### With Internal State and Light DOM
 
 ```js
-import { rendux } from 'rendux';
+import { reflectx } from 'reflectx';
 
-class MyElement extends HTMLElement {
+class TodoApp extends HTMLElement {
   constructor() {
     super();
     
     // Internal component state
     this.state = {
-      title: 'User List',
-      users: [
-        { name: 'Alice', active: true },
-        { name: 'Bob', active: false }
+      title: 'My Tasks',
+      todos: [
+        { id: 1, text: 'Pet the cat', done: true },
+        { id: 2, text: 'Drink more coffee', done: false }
       ]
     };
   }
@@ -234,23 +324,23 @@ class MyElement extends HTMLElement {
     // Render directly into light DOM (no shadow root)
     this.innerHTML = `
       <div>
-        <h2 render="title"></h2>
-        <template x-for="user of users">
-          <div x-class="(active, user.active)">
-            <span render="user.name"></span>
-            <button @click="toggleUser(user)">Toggle</button>
+        <h2 x-text="title"></h2>
+        <template x-for="todo of todos">
+          <div x-class="(completed, todo.done)">
+            <span x-text="todo.text"></span>
+            <button @click="toggleTodo(todo)">Toggle</button>
           </div>
         </template>
       </div>
     `;
     // Pass state and element - renders into element itself (light DOM)
-    rendux(this.state, this);
+    reflectx(this.state, this);
   }
 
-  toggleUser(user) {
-    user.active = !user.active;
+  toggleTodo(todo) {
+    todo.done = !todo.done;
     // Re-render after state change
-    rendux(this.state, this);
+    reflectx(this.state, this);
   }
 }
 ```
@@ -258,31 +348,31 @@ class MyElement extends HTMLElement {
 #### With External/Global State
 
 ```js
-import { rendux } from 'rendux';
+import { reflectx } from 'reflectx';
 import { state } from './state.js'; // External state (could be from a store)
 
-class MyGlobalUsers extends HTMLElement {
+class GlobalTodoList extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <div>
-        <h2 render="title"></h2>
-        <template x-for="(user, userIndex) of users">
-          <div x-class="(active, user.active) (non-active, !user.active)">
-            <span render="user.name"></span>
-            <span render="userIndex"></span>
-            <button @click="toggleUser(user)">Toggle</button>
+        <h2 x-text="title"></h2>
+        <template x-for="(todo, index) of todos">
+          <div x-class="(completed, todo.done) (pending, !todo.done)">
+            <span x-text="index + 1"></span>.
+            <span x-text="todo.text"></span>
+            <button @click="toggleTodo(todo)">Toggle</button>
           </div>
         </template>
       </div>
     `;
     // Use external state with this element
-    rendux(state, this);
+    reflectx(state, this);
   }
 
-  toggleUser(user) {
-    user.active = !user.active;
+  toggleTodo(todo) {
+    todo.done = !todo.done;
     // Re-render with external state
-    rendux(state, this);
+    reflectx(state, this);
   }
 }
 ```
@@ -291,26 +381,26 @@ class MyGlobalUsers extends HTMLElement {
 - **First argument**: Always the state object (can be `this.state`, an external state, or any object/array)
 - **Second argument**: Always the DOM element (`this` in Custom Elements)
 - **Rendering target**: If element has `shadowRoot`, renders into it; otherwise renders into the element itself (light DOM)
-- **Template expressions**: Reference properties directly from the state object (e.g., `title`, `users`, not `state.title`)
+- **Template expressions**: Reference properties directly from the state object (e.g., `title`, `todos`, not `state.title`)
 
 
 ### With Plain HTML
 
-You can also use rendux with plain HTML:
+You can also use `reflectx` with plain HTML:
 
 ```html
 <!DOCTYPE html>
 <html>
 <head>
   <script type="module">
-    import { rendux } from './src/rendux.js';
+    import { reflectx } from './src/reflectx.js';
     
     // Create a state object with your data
     const state = {
-      title: 'User List',
-      users: [
-        { name: 'Alice', active: true },
-        { name: 'Bob', active: false }
+      title: 'My Tasks',
+      todos: [
+        { id: 1, text: 'Touch grass', done: false },
+        { id: 2, text: 'Google the error', done: true }
       ]
     };
     
@@ -318,19 +408,19 @@ You can also use rendux with plain HTML:
     const container = document.querySelector('#app');
     
     // Initial render
-    rendux(state, container);
+    reflectx(state, container);
     
     // To update after state changes:
-    // state.users.push({ name: 'Charlie', active: true });
-    // rendux(state, container);
+    // state.todos.push({ id: 3, text: 'Ship it', done: false });
+    // reflectx(state, container);
   </script>
 </head>
 <body>
   <div id="app">
-    <h2 render="title">User List</h2>
-    <template x-for="user of users">
-      <div x-class="(active, user.active)">
-        <span render="user.name"></span>
+    <h2 x-text="title">My Tasks</h2>
+    <template x-for="todo of todos">
+      <div x-class="(completed, todo.done)">
+        <span x-text="todo.text"></span>
       </div>
     </template>
   </div>
@@ -340,52 +430,52 @@ You can also use rendux with plain HTML:
 
 **Key Points for Plain HTML Usage:**
 - Create a state object with your data
-- Pass the state and container element to `rendux(state, element)`
-- Call `rendux(state, element)` again after state changes to re-render
+- Pass the state and container element to `reflectx(state, element)`
+- Call `reflectx(state, element)` again after state changes to re-render
 - Event handlers (like `@click`) can reference methods if you add them to the element's prototype or use inline expressions
 
 ### With CommonJS (Node.js)
 
 ```js
 // Import using CommonJS
-const { rendux } = require('@ynck/rendux');
+const { reflectx } = require('@nativelayer.dev/reflectx');
 
 // Create a state object with your data
 const state = {
-  title: 'Server Context',
-  users: [
-    { name: 'Alice', active: true },
-    { name: 'Bob', active: false }
+  title: 'Server Tasks',
+  todos: [
+    { id: 1, text: 'Fix production bug', done: false },
+    { id: 2, text: 'Blame the intern', done: true }
   ]
 };
 
-// Note: rendux requires a DOM environment
+// Note: reflectx requires a DOM environment
 // For Node.js, use with a DOM implementation like jsdom
 const { JSDOM } = require('jsdom');
 const dom = new JSDOM(`
   <div id="app">
-    <h2 render="title">User List</h2>
-    <template x-for="user of users">
-      <div x-class="(active, user.active)">
-        <span render="user.name"></span>
+    <h2 x-text="title">Server Tasks</h2>
+    <template x-for="todo of todos">
+      <div x-class="(completed, todo.done)">
+        <span x-text="todo.text"></span>
       </div>
     </template>
   </div>
 `);
 
-// Set up global document for rendux
+// Set up global document for reflectx
 global.document = dom.window.document;
 
 // Get the container element
 const container = dom.window.document.querySelector('#app');
 
-// Call rendux with state and element
-rendux(state, container);
+// Call reflectx with state and element
+reflectx(state, container);
 ```
 
-**When to Use `rendux.cjs`:**
+**When to Use `reflectx.cjs`:**
 
-Use the CommonJS build (`dist/rendux.cjs`) in these scenarios:
+Use the CommonJS build (`dist/reflectx.cjs`) in these scenarios:
 
 1. **Node.js Build Tools**: When using bundlers or build systems that require CommonJS (older Webpack configs, some testing frameworks)
 2. **Server-Side Rendering (SSR)**: When rendering components on the server with a DOM implementation like jsdom or happy-dom
@@ -393,62 +483,87 @@ Use the CommonJS build (`dist/rendux.cjs`) in these scenarios:
 4. **Testing Environments**: Jest or other test runners configured for CommonJS (though modern Jest supports ESM)
 5. **npm Package Distribution**: When publishing packages that need to support both module systems
 
-**Note**: rendux requires a DOM environment. For Node.js/server usage, you must provide a DOM implementation (jsdom, happy-dom, linkedom) since rendux uses `document`, `Element`, `querySelectorAll`, etc.
+**Note**: `reflectx` requires a DOM environment. For Node.js/server usage, you must provide a DOM implementation (jsdom, happy-dom, linkedom) since `reflectx` uses `document`, `Element`, `querySelectorAll`, etc.
 
-For modern projects with native ESM support, prefer the ESM build (`dist/rendux.js`) instead.
+For modern projects with native ESM support, prefer the ESM build (`dist/reflectx.esm.min.js`) instead.
 
 ### With Reactive State Libraries
 
-rendux works seamlessly with reactive state management libraries. Here's an example using a Proxy-based reactive state:
+reflectx works seamlessly with reactive state management libraries. Here's an example using a Proxy-based reactive state:
 
 ```js
-import { rendux } from 'rendux';
+import { reflectx } from 'reflectx';
 import { restate } from 'restate'; // Or any reactive state library
 
 // Create reactive state
 const state = restate({
-  title: 'User List',
-  users: [
-    { name: 'Alice', active: true },
-    { name: 'Bob', active: false }
+  title: 'My Tasks',
+  todos: [
+    { id: 1, text: 'Deploy to production', done: false },
+    { id: 2, text: 'Write tests (maybe)', done: false }
   ]
 });
 
-class MyComponent extends HTMLElement {
+class TodoComponent extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <div>
-        <h2 render="title"></h2>
-        <template x-for="user of users">
-          <div x-class="(active, user.active)">
-            <span render="user.name"></span>
-            <button @click="toggleUser(user)">Toggle</button>
+        <h2 x-text="title"></h2>
+        <template x-for="todo of todos">
+          <div x-class="(completed, todo.done)">
+            <span x-text="todo.text"></span>
+            <button @click="toggleTodo(todo)">Toggle</button>
           </div>
         </template>
       </div>
     `;
     
     // Initial render
-    rendux(state, this);
+    reflectx(state, this);
     
     // Set up automatic re-rendering on state changes
     state.$onChange(() => {
-      rendux(state, this);
+      reflectx(state, this);
     });
   }
   
-  toggleUser(user) {
+  toggleTodo(todo) {
     // Just mutate - reactive state will trigger re-render
-    user.active = !user.active;
+    todo.done = !todo.done;
   }
 }
 ```
 
 **Benefits of Reactive State:**
 - Automatic re-rendering when state changes
-- No need to manually call `rendux()` after every update
+- No need to manually call `reflectx()` after every update
 - Works with any Proxy-based reactive library
-- rendux handles circular references and deep objects safely
+- `reflectx` handles circular references and deep objects safely
+
+### HTML Template Tag Helper (IDE Syntax Highlighting)
+
+reflectx exports an `html` template tag function that enables HTML syntax highlighting in your IDE when writing templates as template literals:
+
+```js
+import { reflectx, html } from '@nativelayer.dev/reflectx';
+
+class MyComponent extends HTMLElement {
+  connectedCallback() {
+    // The html tag enables syntax highlighting in VS Code, WebStorm, etc.
+    this.innerHTML = html`
+      <div>
+        <h2 x-text="title"></h2>
+        <template x-for="item of items">
+          <span x-text="item.name"></span>
+        </template>
+      </div>
+    `;
+    reflectx(this.state, this);
+  }
+}
+```
+
+The `html` tag is purely for IDE support and doesn't transform the string - it returns the template literal as-is. Most modern IDEs will recognize this pattern and provide HTML syntax highlighting, autocompletion, and formatting within the template.
 
 ## Directives
 
@@ -465,23 +580,66 @@ The element is completely removed from the DOM (not just hidden) when the condit
 ### 2. List Rendering (`x-for`)
 
 Supports two syntaxes:
+
 ```html
 <!-- Simple iteration -->
-<template x-for="item of items">
-  <div render="item.name"></div>
+<template x-for="todo of todos">
+  <div x-text="todo.text"></div>
 </template>
 
 <!-- With index -->
-<template x-for="(item, index) of items">
-  <div render="index + ': ' + item.name"></div>
+<template x-for="(todo, index) of todos">
+  <div x-text="(index + 1) + '. ' + todo.text"></div>
 </template>
 ```
+
+#### Performance Optimization with `x-key`
+
+For improved performance when updating lists, use the `x-key` attribute to enable **per-item diffing**:
+
+```html
+<!-- Without x-key: full re-render on every change -->
+<template x-for="(todo, index) of todos">
+  <div x-text="todo.text"></div>
+</template>
+
+<!-- With x-key: only changed items are re-rendered -->
+<template x-for="(todo, index) of todos">
+  <div x-text="todo.text" x-key="todo.id"></div>
+</template>
+```
+
+**How `x-key` works:**
+- Each item is tracked by its unique `x-key` value (e.g., `todo.id`, `index`, or any unique expression)
+- When the array changes, `reflectx` compares the new items with the old ones by their `x-key`
+- **Reuses existing DOM nodes** for items that haven't changed (only updates their data)
+- **Creates new nodes** only for new items
+- **Removes nodes** only for deleted items
+- **Reorders nodes** efficiently when items are moved
+
+**Performance benefits:**
+- ✅ **Faster updates**: Only changed items are processed, not the entire list
+- ✅ **Preserves DOM state**: Input focus, scroll position, and animations are maintained
+- ✅ **Reduces layout thrashing**: Minimal DOM manipulation
+- ✅ **Better for large lists**: Scales well with thousands of items
+
+**When to use `x-key`:**
+- Lists that frequently update (add/remove/reorder items)
+- Large lists (100+ items)
+- Lists with user input (forms, checkboxes, text fields)
+- Lists with animations or transitions
+
+**Best practices:**
+- Use a **unique, stable identifier** like `todo.id` or `item.uuid`
+- Avoid using `index` as value for `x-key` if items can be reordered or filtered
+- The `x-key` expression is evaluated for each item and should return a primitive value (string, number)
 
 Features:
 - Uses `<template>` tag to define the repeatable content
 - Maintains its own render cache per iteration
 - Supports deep change detection for arrays
 - Provides iteration context to nested elements
+- **Per-item diffing with `x-key` for optimal performance**
 
 ### 3. Class Binding (`x-class`)
 
@@ -507,31 +665,45 @@ Any attribute prefixed with `x-` (except special directives) becomes dynamic:
 <div x-data-id="getId()">
 ```
 
-### 5. Text Content (`render`)
+### 5. Text Content (`x-text`)
 
 Renders dynamic text content:
 
 ```html
 <!-- Simple value -->
-<span render="message"></span>
+<span x-text="message"></span>
 
 <!-- With condition -->
-<span render="message, isVisible">
+<span x-text="message, isVisible">
   Default text when not visible
 </span>
 ```
 
 Features:
+
 - Supports expressions
 - Can access component methods and properties
 - Handles objects (converts to JSON)
 - Supports conditional rendering
 
-### 6. Event Handling (`@event`)
+### 6. Event Handling (`@event` / `x-on:event`)
+
+Two equivalent syntaxes are available for event handlers:
+
+```html
+<!-- @ shorthand syntax (recommended) -->
+<button @click="handleClick()">Click me</button>
+
+<!-- x-on: prefix syntax -->
+<button x-on:click="handleClick()">Click me</button>
+```
+
+Both syntaxes work identically - use whichever you prefer:
 
 ```html
 <!-- Click events -->
 <button @click="handleClick()">Click me</button>
+<button x-on:click="handleClick()">Click me</button>
 
 <!-- Form events -->
 <input @input="updateValue(event.target.value)"
@@ -547,21 +719,21 @@ The event object is automatically available in handlers as `event`.
 
 ## Plugin System
 
-rendux includes a powerful plugin system that allows you to extend templating functionality with custom directives.
+reflectx includes a powerful plugin system that allows you to extend templating functionality with custom directives.
 
 ### Using Plugins
 
 Plugins are registered using the `use()` method, which is chainable:
 
 ```js
-import { rendux } from 'rendux';
+import { reflectx } from 'reflectx';
 import { myCustomPlugin } from './plugins/my-plugin.js';
 
 // Register plugin (chainable)
-rendux.use(myCustomPlugin);
+reflectx.use(myCustomPlugin);
 
 // Or chain multiple plugins
-rendux
+reflectx
   .use(plugin1)
   .use(plugin2)
   .use(plugin3);
@@ -569,17 +741,17 @@ rendux
 
 ### Using Plugin Directives in Templates
 
-Once registered, plugins can be used with the `render.pluginName` attribute:
+Once registered, plugins can be used with the `x-text.pluginName` attribute:
 
 ```html
 <!-- Using a custom formatter plugin -->
-<span render.format="user.name">Default Name</span>
+<span x-text.format="todo.text">Default Task</span>
 
 <!-- Using a custom i18n plugin -->
-<p render.i18n="greeting">Hello!</p>
+<p x-text.i18n="greeting">Hello!</p>
 
 <!-- Generic plugin syntax -->
-<span render.plugin="myPlugin('arg1', 'arg2')">Fallback</span>
+<span x-text.plugin="myPlugin('arg1', 'arg2')">Fallback</span>
 ```
 
 ### Creating Custom Plugins
@@ -588,7 +760,7 @@ A plugin is an object with specific properties and methods:
 
 ```js
 export const myPlugin = {
-  // Required: Plugin name (used in render.pluginName)
+  // Required: Plugin name (used in x-text.pluginName)
   name: 'myPlugin',
   
   // Required: Main execution function
@@ -652,14 +824,14 @@ export const formatPlugin = {
 };
 
 // Register the plugin
-rendux.use(formatPlugin);
+reflectx.use(formatPlugin);
 ```
 
 Usage in template:
 
 ```html
-<span render.format="user.name, 'capitalize'">John Doe</span>
-<span render.format="title, 'uppercase'">Hello World</span>
+<span x-text.format="todo.text, 'capitalize'">buy milk</span>
+<span x-text.format="title, 'uppercase'">my tasks</span>
 ```
 
 ### Plugin Example: Conditional Formatter
@@ -729,27 +901,27 @@ export const safePlugin = {
 
 ## Security
 
-rendux is designed with security as a core principle, implementing several protective measures to prevent common web vulnerabilities:
+reflectx is designed with security as a core principle, implementing several protective measures to prevent common web vulnerabilities:
 
 ### XSS Prevention Through Safe Content Handling
 
 **No innerHTML Usage for Dynamic Content**
-- rendux never uses `innerHTML` for dynamic content rendering
+- `reflectx` never uses `innerHTML` for dynamic content rendering
 - All user data is inserted using `textContent`, which automatically escapes HTML
 - This prevents malicious script injection through user-controlled data
 
 ```js
 // Safe: User input is escaped automatically
-<span render="userInput"></span>  // Uses textContent internally
+<span x-text="userInput"></span>  // Uses textContent internally
 
-// Unsafe (what rendux avoids):
+// Unsafe (what `reflectx` avoids):
 element.innerHTML = userInput;    // Could execute scripts
 ```
 
 ### Sandboxed Expression Evaluator
 
 **Custom Mini-Evaluator Instead of eval()**
-- rendux includes a custom expression parser that never uses `eval()` or `Function()`
+- `reflectx` includes a custom expression parser that never uses `eval()` or `Function()`
 - Only supports safe operations: property access, method calls, basic operators
 - Prevents arbitrary code execution through template expressions
 
@@ -760,18 +932,19 @@ element.innerHTML = userInput;    // Could execute scripts
 
 ```js
 // Safe expressions supported:
-render="user.name"                    ✓
-render="Math.max(a, b)"              ✓
-render="items.length > 0 ? 'Yes' : 'No'" ✓
+x-text="todo.text"                    ✓
+x-text="Math.max(a, b)"              ✓
+x-text="items.length > 0 ? 'Yes' : 'No'" ✓
 
 // Dangerous expressions blocked:
-render="eval('malicious code')"       ✗ (eval not accessible)
-render="window.location = 'evil.com'" ✗ (window not accessible)
+x-text="eval('malicious code')"       ✗ (eval not accessible)
+x-text="window.location = 'evil.com'" ✗ (window not accessible)
 ```
 
 ### Template Content Security
 
 **Safe Template Processing**
+
 - Template elements (`<template x-for>`) use `.content` property, not innerHTML
 - Attributes are processed safely without executing embedded scripts
 - Event handlers are properly scoped and don't use string-to-function conversion
@@ -781,7 +954,7 @@ render="window.location = 'evil.com'" ✗ (window not accessible)
 1. **Validate Inputs**: Always validate and sanitize user inputs before adding them to state
 2. **Context Isolation**: Each component maintains its own isolated context
 3. **No Script Injection**: User data in expressions is evaluated safely, not executed as code
-4. **Safe State Updates**: Mutate state objects directly and call `rendux()` to re-render, avoiding innerHTML manipulation
+4. **Safe State Updates**: Mutate state objects directly and call `reflectx()` to re-render, avoiding innerHTML manipulation
 
 ```js
 // Safe state update example
@@ -798,19 +971,19 @@ class MyComponent extends HTMLElement {
     const value = event.target.value;
     if (typeof value === 'string' && value.length < 100) {
       this.state.userInput = value.trim();
-      rendux(this.state, this); // Safe re-render
+      reflectx(this.state, this); // Safe re-render
     }
   }
 }
 ```
 
-This security model makes rendux suitable for applications handling user-generated content while maintaining the flexibility of a templating engine.
+This security model makes `reflectx` suitable for applications handling user-generated content while maintaining the flexibility of a templating engine.
 
 ### Security Audit Summary
 
-rendux has been designed and audited to ensure maximum security for web applications:
+reflectx has been designed and audited to ensure maximum security for web applications:
 
-#### Core Engine Security ✓
+#### Core Engine Security
 
 **No Dangerous Functions**
 - ✓ No `eval()` or `Function()` constructor used
@@ -906,10 +1079,36 @@ When creating plugins, ensure you:
 | Expression Safety | ✓ Sandboxed | ✓ Sandboxed |
 | Input Validation | ✓ Type-checked | ⚠️ Developer responsibility |
 
-**Verdict**: rendux provides a **secure foundation** for web applications. The core engine is hardened against XSS and code injection attacks. Plugin developers must follow security best practices and validate all inputs to maintain the security guarantee.
+`reflectx` provides a **secure foundation** for web applications. The core engine is hardened against XSS and code injection attacks. Plugin developers must follow security best practices and validate all inputs to maintain the security guarantee.
+
+## Browser Support
+
+reflectx works in all modern browsers that support:
+
+- **ES6+** (Proxy, template literals, modules)
+- **Custom Elements** (for Web Components usage)
+- **`<template>`** element
+
+Tested on: Chrome, Firefox, Safari, Edge (evergreen).
+
+## Known Limitations
+
+- **Manual re-renders** — Call `reflectx(state, element)` after state changes unless using a reactive state library
+- **Event handlers** — Both `@click="openRoot"` and `@click="openRoot()"` work; the function is auto-invoked when the expression evaluates to a function
+- **Private fields** — Event handlers receive the real component as `this`, so private fields (`#path`) work in methods
+- **DOM replacement** — `x-for` without `x-key` replaces nodes on each render; use `x-key` for optimal performance and to preserve DOM state
+
+## Contributing
+
+Contributions are welcome. Please open an issue or submit a pull request on [GitHub](https://github.com/ynck-chrl/reflectx).
 
 ## License
 
-This project is available under two licenses:
-- Non-commercial use: See LICENSE-NONCOMMERCIAL.md
-- Commercial use: See EULA-COMMERCIAL.md
+`reflectx` is licensed under the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/).
+
+- ✅ Personal projects, hobby use, education, research, non-profits
+- ❌ Commercial / revenue-generating use requires a separate license
+
+See [LICENSE](./LICENSE) for full terms.
+
+**For commercial licensing inquiries:** info@nativelayer.dev

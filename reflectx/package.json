@@ -1,0 +1,30 @@
+{
+  "name": "@nativelayer.dev/reflectx",
+  "version": "0.3.2",
+  "type": "module",
+  "main": "./dist/reflectx.cjs.min.js",
+  "module": "./dist/reflectx.esm.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/reflectx.esm.min.js",
+      "require": "./dist/reflectx.cjs.min.js"
+    }
+  },
+  "author": "Yannick J.A. Charlery",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ynck-chrl/reflectx.git"
+  },
+  "homepage": "https://github.com/ynck-chrl/reflectx",
+  "bugs": {
+    "url": "https://github.com/ynck-chrl/reflectx/issues"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "Polyform-Noncommercial-1.0.0",
+  "files": [
+    "**/*"
+  ]
+}
