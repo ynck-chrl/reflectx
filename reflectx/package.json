@@ -1,6 +1,6 @@
 {
   "name": "@nativelayer.dev/reflectx",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "type": "module",
   "main": "./dist/reflectx.cjs.min.js",
   "module": "./dist/reflectx.esm.min.js",
