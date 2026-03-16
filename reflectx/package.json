@@ -1,6 +1,7 @@
 {
   "name": "@nativelayer.dev/reflectx",
-  "version": "0.3.3",
+  "version": "0.3.4",
+  "description": "A lightweight dependency-free templating and DOM binding library for HTML and Web Components",
   "type": "module",
   "main": "./dist/reflectx.cjs.min.js",
   "module": "./dist/reflectx.esm.min.js",
