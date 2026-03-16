@@ -4,17 +4,18 @@
 # Keep this file
 !.gitignore
 
-# Local helper scripts
-publish-dist.sh
+# Allow root documentation and license
+!README.md
+!CHANGELOG.md
+!LICENSE
 
 # Allow image files
 !*.jpg
 !*.png
 
-
 # Allow specific directories and their contents
-!rendux/
-!rendux/**
+!reflectx/
+!reflectx/**
 
 !.github/
 !.github/**
