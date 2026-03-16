@@ -1098,9 +1098,7 @@ Tested on: Chrome, Firefox, Safari, Edge (evergreen).
 - **Private fields** — Event handlers receive the real component as `this`, so private fields (`#path`) work in methods
 - **DOM replacement** — `x-for` without `x-key` replaces nodes on each render; use `x-key` for optimal performance and to preserve DOM state
 
-## Contributing
-
-Contributions are welcome. Please open an issue or submit a pull request on [GitHub](https://github.com/ynck-chrl/reflectx).
+## Reporting vulnerabilities
 
 **Security:** If you discover a security vulnerability, please report it privately via email at **info@nativelayer.dev** rather than opening a public issue.
 
